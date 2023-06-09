@@ -18,9 +18,15 @@ export class DealLimitService {
     return this.dealLimitRepository.save(dealLimit);
   }
 
-  // async getDealLimitByCurrency(currency: DealCurrencyMap) {
-  //   return await this.dealLimitRepository.findOne({
-  //     where: { deal_currency_map: currency },
-  //   });
-  // }
+  async getAllDealLimits() {
+    return this.dealLimitRepository.find();
+  }
+
+  async getDealLimitById(id: number) {
+    return this.dealLimitRepository.findOne({
+      where: {
+        id,
+      },
+    });
+  }
 }

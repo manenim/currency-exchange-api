@@ -16,7 +16,7 @@ export class Deals {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   deal_reference: string;
     
   @BeforeInsert()

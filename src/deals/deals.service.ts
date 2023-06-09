@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Deals } from './deals.entity';
@@ -43,8 +39,6 @@ export class DealsService {
       })
       .getOne();
 
-    console.log(dealLimit);
-
     validateDealAmount(dto, dealLimit);
     validateSellAmount(dto);
 
@@ -54,13 +48,10 @@ export class DealsService {
     return this.dealsRepository.save(deal);
   }
 
-  //
-  //get all deals
   async getAllDeals() {
     return this.dealsRepository.find();
   }
 
-  //get deal by id
   async getDealById(id: number) {
     return this.dealsRepository.findOne({
       where: {
@@ -69,7 +60,6 @@ export class DealsService {
     });
   }
 
-  //update deal status
   async updateDealStatus(id: number, status: DealStatus) {
     const deal = await this.getDealById(id);
     if (!deal) {
@@ -79,7 +69,6 @@ export class DealsService {
     return this.dealsRepository.save(deal);
   }
 
-  //delete deal
   async deleteDeal(id: number) {
     const deal = await this.getDealById(id);
     return this.dealsRepository.remove(deal);

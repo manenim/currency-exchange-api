@@ -10,12 +10,17 @@ import {
 import { DealsService } from './deals.service';
 import { CreateDealDto } from './dto/create-deal.dto';
 import { UpdateDealStatusDto } from './dto/update-deal-status.dto';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Deals')
 @Controller('deals')
 export class DealsController {
   constructor(private dealsService: DealsService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a new deal' })
+  @ApiResponse({ status: 200, description: 'Deal created successfully' })
+  @ApiBody({ type: CreateDealDto })
   createDeal(@Body() dto: CreateDealDto) {
     return this.dealsService.createDeal(dto);
   }

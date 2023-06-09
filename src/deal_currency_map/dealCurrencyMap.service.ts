@@ -19,7 +19,6 @@ export class DealCurrencyMapService {
   }
 
   findOneByCurrencies(filterDto: GetCurrencyFilterDto) {
-    console.log('hey', filterDto);
     const currencyMap = this.dealCurrencyMapRepository.findOne({
       where: {
         sell_currency: filterDto.sell_currency,
