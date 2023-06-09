@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DealLimitController } from './deal_limit.controller';
+import { DealLimitController } from './dealLimit.controller';
 
 describe('DealLimitController', () => {
   let controller: DealLimitController;

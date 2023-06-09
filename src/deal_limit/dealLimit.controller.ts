@@ -1,11 +1,8 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { DealLimitService } from './deal_limit.service';
+import { DealLimitService } from './dealLimit.service';
 import { CreateDealLimitDto } from './dto/create_deal_limit.dto';
 import { Currency } from 'src/deal_currency_map/decorators/currency.decorator';
-import { DealCurrencyMapController } from 'src/deal_currency_map/deal_currency_map.controller';
-import { CreateDealCurrencyMapDto } from 'src/deal_currency_map/dto/create-deal-currency.dto';
-import { Deal_limit } from './deal_limit.entity';
-import { Deal_currency_map } from 'src/deal_currency_map/deal_currency_map.entity';
+import { DealCurrencyMap } from 'src/deal_currency_map/dealCurrencyMap.entity';
 
 @Controller('deal-limit')
 export class DealLimitController {
@@ -14,7 +11,7 @@ export class DealLimitController {
   @Post()
   createDealLimit(
     @Body() dto: CreateDealLimitDto,
-    @Currency() currency: Deal_currency_map,
+    @Currency() currency: DealCurrencyMap,
   ) {
     return this.dealLimitService.createDealLimit(dto, currency);
   }

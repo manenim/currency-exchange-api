@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateDealCurrencyMapDto } from './dto/create-deal-currency.dto';
-import { Deal_currency_map } from './deal_currency_map.entity';
+import { DealCurrencyMap } from './dealCurrencyMap.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GetCurrencyFilterDto } from './dto/get-currency-filter.dto';
@@ -8,8 +8,8 @@ import { GetCurrencyFilterDto } from './dto/get-currency-filter.dto';
 @Injectable()
 export class DealCurrencyMapService {
   constructor(
-    @InjectRepository(Deal_currency_map)
-    private dealCurrencyMapRepository: Repository<Deal_currency_map>,
+    @InjectRepository(DealCurrencyMap)
+    private dealCurrencyMapRepository: Repository<DealCurrencyMap>,
   ) {}
 
   createDealCurrencyMap(dto: CreateDealCurrencyMapDto) {

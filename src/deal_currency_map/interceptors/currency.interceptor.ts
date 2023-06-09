@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
-import { DealCurrencyMapService } from './../deal_currency_map.service';
+import { DealCurrencyMapService } from '../dealCurrencyMap.service';
 import { Observable } from 'rxjs';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { DealCurrencyMapService } from './deal_currency_map.service';
+import { DealCurrencyMapService } from './dealCurrencyMap.service';
 import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 import { CreateDealCurrencyMapDto } from './dto/create-deal-currency.dto';
 import { GetCurrencyFilterDto } from './dto/get-currency-filter.dto';

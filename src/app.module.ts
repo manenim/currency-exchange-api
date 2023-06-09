@@ -2,10 +2,12 @@ import { Module } from '@nestjs/common';
 import { DealsModule } from './deals/deals.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Deals } from './deals/deals.entity';
-import { DealCurrencyMapModule } from './deal_currency_map/deal_currency_map.module';
-import { Deal_currency_map } from './deal_currency_map/deal_currency_map.entity';
-import { DealLimitModule } from './deal_limit/deal_limit.module';
-import { Deal_limit } from './deal_limit/deal_limit.entity';
+import { DealCurrencyMapModule } from './deal_currency_map/dealCurrencyMap.module';
+import { DealCurrencyMap } from './deal_currency_map/dealCurrencyMap.entity';
+import { DealLimitModule } from './deal_limit/dealLimit.module';
+import { DealLimit } from './deal_limit/dealLimit.entity';
+import { TransactionsModule } from './transactions/transactions.module';
+import { Transactions } from './transactions/transactions.entity';
 
 @Module({
   imports: [
@@ -18,12 +20,13 @@ import { Deal_limit } from './deal_limit/deal_limit.entity';
       password: 'manex1234',
       database: 'deals',
       // entities: ['dist/**/*.entity{.ts,.js}'],
-      entities: [Deals, Deal_currency_map, Deal_limit],
+      entities: [Deals, DealCurrencyMap, DealLimit, Transactions],
       autoLoadEntities: true,
       synchronize: true,
     }),
     DealCurrencyMapModule,
     DealLimitModule,
+    TransactionsModule,
   ],
   controllers: [],
   providers: [],

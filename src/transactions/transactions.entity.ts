@@ -1,6 +1,4 @@
 /* eslint-disable prettier/prettier */
-import { v4 as uuid } from 'uuid';
-import { BeforeInsert } from 'typeorm';
 
 import {
   Entity,
@@ -9,27 +7,26 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { DealStatus } from './deal-status.enum';
 
 @Entity()
-export class Deals {
+export class Transactions {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  deal_reference: string;
+    deal_reference: string;
     
-  @BeforeInsert()
-  public createDealReference() {
-    this.deal_reference = uuid();
-  }
-    
+  @Column()
+  deal_transaction_reference: string;
 
   @Column()
   user_id: number;
 
   @Column()
-  deal_currency: string;
+  sell_currency: string;
+    
+  @Column()
+  buy_currency: string;
 
   @Column()
   deal_rate: number;
@@ -43,9 +40,6 @@ export class Deals {
   @Column()
   commision: number;
 
-  @Column()
-  status: DealStatus;
-
   @CreateDateColumn({ type: 'timestamp' })
   public created_at!: Date;
 
@@ -53,6 +47,6 @@ export class Deals {
   public updated_at!: Date;
 
   @CreateDateColumn({ type: 'timestamp' })
-    public deleted_at!: Date;
+  public deleted_at!: Date;
 
 }

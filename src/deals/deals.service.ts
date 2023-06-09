@@ -1,29 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Deals } from './deals.entity';
-import { CreatDealDto } from './dto/create-deal.dto';
-import { Deal_currency_map } from 'src/deal_currency_map/deal_currency_map.entity';
-import { Deal_limit } from 'src/deal_limit/deal_limit.entity';
+import { CreateDealDto } from './dto/create-deal.dto';
+import { DealCurrencyMap } from 'src/deal_currency_map/dealCurrencyMap.entity';
+import { DealLimit } from 'src/deal_limit/dealLimit.entity';
+import { DealStatus } from './deal-status.enum';
+import { validateDealAmount } from './shared/validators/dealAmountValidator';
+import { validateSellAmount } from './shared/validators/sellAmountValidator';
 
 @Injectable()
 export class DealsService {
   constructor(
     @InjectRepository(Deals) private dealsRepository: Repository<Deals>,
-    @InjectRepository(Deal_currency_map)
-    private dealCurrencyMapRepository: Repository<Deal_currency_map>,
-    @InjectRepository(Deal_limit)
-    private dealLimitRepository: Repository<Deal_limit>,
+    @InjectRepository(DealCurrencyMap)
+    private dealCurrencyMapRepository: Repository<DealCurrencyMap>,
+    @InjectRepository(DealLimit)
+    private dealLimitRepository: Repository<DealLimit>,
   ) {}
 
-  //get deal currency map
-  // async getDealCurrencyMap() {
-  //   return this.dealCurrencyMapRepository.find();
-  // }
-
-  async createDeal(dto: CreatDealDto) {
-    // console.log(dto);
-    // check if currency exists in sell_currency column of deal_currency_map table
+  async createDeal(dto: CreateDealDto) {
+    // check if the currency exists in the deal_currency_map table
     const currencyMap = await this.dealCurrencyMapRepository.findOne({
       where: {
         sell_currency: dto.deal_currency,
@@ -32,8 +33,8 @@ export class DealsService {
     if (!currencyMap) {
       throw new Error('Currency does not exist');
     }
-    // extract the id of the currency
     const dealCurrencyMapId = currencyMap.id;
+
     // check in the deal_limit table if the currencymap id exists
     const dealLimit = await this.dealLimitRepository
       .createQueryBuilder('deal_limit')
@@ -44,14 +45,43 @@ export class DealsService {
 
     console.log(dealLimit);
 
-    // const deal = this.dealsRepository.create(dto);
+    validateDealAmount(dto, dealLimit);
+    validateSellAmount(dto);
 
-    // return this.dealsRepository.save(deal);
+    const deal = this.dealsRepository.create(dto);
+    deal.status = DealStatus.A;
+
+    return this.dealsRepository.save(deal);
   }
 
   //
   //get all deals
   async getAllDeals() {
     return this.dealsRepository.find();
+  }
+
+  //get deal by id
+  async getDealById(id: number) {
+    return this.dealsRepository.findOne({
+      where: {
+        id,
+      },
+    });
+  }
+
+  //update deal status
+  async updateDealStatus(id: number, status: DealStatus) {
+    const deal = await this.getDealById(id);
+    if (!deal) {
+      throw new Error('Deal not found');
+    }
+    deal.status = status;
+    return this.dealsRepository.save(deal);
+  }
+
+  //delete deal
+  async deleteDeal(id: number) {
+    const deal = await this.getDealById(id);
+    return this.dealsRepository.remove(deal);
   }
 }

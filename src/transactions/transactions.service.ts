@@ -1,0 +1,50 @@
+import { Injectable, BadRequestException } from '@nestjs/common';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { Repository } from 'typeorm';
+import { Transactions } from './transactions.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Deals } from 'src/deals/deals.entity';
+
+@Injectable()
+export class TransactionsService {
+  constructor(
+    @InjectRepository(Transactions)
+    private transactionsRepository: Repository<Transactions>,
+    @InjectRepository(Deals) private dealsRepository: Repository<Deals>,
+  ) {}
+
+  async createTransaction(dto: CreateTransactionDto) {
+    // get deals
+    const deal = await this.dealsRepository.findOne({
+      where: {
+        deal_reference: dto.deal_reference,
+      },
+    });
+
+    if (!deal) {
+      throw new BadRequestException('Deal does not exist');
+    }
+
+    // check if sell amount is less than or equal to the deal amount
+
+    const transaction = this.transactionsRepository.create(dto);
+    return this.transactionsRepository.save(transaction);
+  }
+
+  //get all transactions
+  async getAllTransactions() {
+    return this.transactionsRepository.find();
+  }
+
+  //get transaction by id
+  async getTransactionById(id: number) {
+    return this.transactionsRepository.findOne({
+      where: {
+        id,
+      },
+    });
+  }
+
+  //update transaction status
+  // waiting for the differnnt status to be defined
+}
