@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Deals } from './deals.entity';
@@ -7,7 +7,6 @@ import { DealCurrencyMap } from 'src/deal_currency_map/dealCurrencyMap.entity';
 import { DealLimit } from 'src/deal_limit/dealLimit.entity';
 import { DealStatus } from './deal-status.enum';
 import { validateDealAmount } from './shared/validators/dealAmountValidator';
-import { validateSellAmount } from './shared/validators/sellAmountValidator';
 
 @Injectable()
 export class DealsService {
@@ -19,7 +18,7 @@ export class DealsService {
     private dealLimitRepository: Repository<DealLimit>,
   ) {}
 
-  async createDeal(dto: CreateDealDto) {
+  async createDeal(dto: CreateDealDto): Promise<Deals> {
     // check if the currency exists in the deal_currency_map table
     const currencyMap = await this.dealCurrencyMapRepository.findOne({
       where: {
@@ -27,7 +26,7 @@ export class DealsService {
       },
     });
     if (!currencyMap) {
-      throw new Error('Currency does not exist');
+      throw new BadRequestException('Currency does not exist');
     }
     const dealCurrencyMapId = currencyMap.id;
 
@@ -40,7 +39,6 @@ export class DealsService {
       .getOne();
 
     validateDealAmount(dto, dealLimit);
-    validateSellAmount(dto);
 
     const deal = this.dealsRepository.create(dto);
     deal.status = DealStatus.A;
@@ -48,11 +46,11 @@ export class DealsService {
     return this.dealsRepository.save(deal);
   }
 
-  async getAllDeals() {
+  async getAllDeals(): Promise<Deals[]> {
     return this.dealsRepository.find();
   }
 
-  async getDealById(id: number) {
+  async getDealById(id: number): Promise<Deals> {
     return this.dealsRepository.findOne({
       where: {
         id,
@@ -60,7 +58,16 @@ export class DealsService {
     });
   }
 
-  async updateDealStatus(id: number, status: DealStatus) {
+  // get deal by deal reference
+  async getDealByDealReference(deal_reference: string): Promise<Deals> {
+    return this.dealsRepository.findOne({
+      where: {
+        deal_reference,
+      },
+    });
+  }
+
+  async updateDealStatus(id: number, status: DealStatus): Promise<Deals> {
     const deal = await this.getDealById(id);
     if (!deal) {
       throw new Error('Deal not found');

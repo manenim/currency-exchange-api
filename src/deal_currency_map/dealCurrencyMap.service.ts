@@ -12,13 +12,17 @@ export class DealCurrencyMapService {
     private dealCurrencyMapRepository: Repository<DealCurrencyMap>,
   ) {}
 
-  createDealCurrencyMap(dto: CreateDealCurrencyMapDto) {
+  createDealCurrencyMap(
+    dto: CreateDealCurrencyMapDto,
+  ): Promise<DealCurrencyMap> {
     const dealCurrencyMap = this.dealCurrencyMapRepository.create(dto);
 
     return this.dealCurrencyMapRepository.save(dealCurrencyMap);
   }
 
-  findOneByCurrencies(filterDto: GetCurrencyFilterDto) {
+  findOneByCurrencies(
+    filterDto: GetCurrencyFilterDto,
+  ): Promise<DealCurrencyMap> {
     const currencyMap = this.dealCurrencyMapRepository.findOne({
       where: {
         sell_currency: filterDto.sell_currency,

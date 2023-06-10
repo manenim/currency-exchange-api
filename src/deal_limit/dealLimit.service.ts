@@ -12,17 +12,20 @@ export class DealLimitService {
     private dealLimitRepository: Repository<DealLimit>,
   ) {}
 
-  createDealLimit(dto: CreateDealLimitDto, currency: DealCurrencyMap) {
+  createDealLimit(
+    dto: CreateDealLimitDto,
+    currency: DealCurrencyMap,
+  ): Promise<DealLimit> {
     const dealLimit = this.dealLimitRepository.create(dto);
     dealLimit.deal_currency_map = currency;
     return this.dealLimitRepository.save(dealLimit);
   }
 
-  async getAllDealLimits() {
+  async getAllDealLimits(): Promise<DealLimit[]> {
     return this.dealLimitRepository.find();
   }
 
-  async getDealLimitById(id: number) {
+  async getDealLimitById(id: number): Promise<DealLimit> {
     return this.dealLimitRepository.findOne({
       where: {
         id,

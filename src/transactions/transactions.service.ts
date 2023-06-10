@@ -13,7 +13,7 @@ export class TransactionsService {
     @InjectRepository(Deals) private dealsRepository: Repository<Deals>,
   ) {}
 
-  async createTransaction(dto: CreateTransactionDto) {
+  async createTransaction(dto: CreateTransactionDto): Promise<Transactions> {
     // get deals
     const deal = await this.dealsRepository.findOne({
       where: {
@@ -28,16 +28,17 @@ export class TransactionsService {
     // check if sell amount is less than or equal to the deal amount
 
     const transaction = this.transactionsRepository.create(dto);
+    transaction.deal = deal;
     return this.transactionsRepository.save(transaction);
   }
 
   //get all transactions
-  async getAllTransactions() {
+  async getAllTransactions(): Promise<Transactions[]> {
     return this.transactionsRepository.find();
   }
 
   //get transaction by id
-  async getTransactionById(id: number) {
+  async getTransactionById(id: number): Promise<Transactions> {
     return this.transactionsRepository.findOne({
       where: {
         id,

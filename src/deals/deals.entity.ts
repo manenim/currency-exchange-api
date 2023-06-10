@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { v4 as uuid } from 'uuid';
-import { BeforeInsert } from 'typeorm';
+import { BeforeInsert, OneToMany } from 'typeorm';
 
 import {
   Entity,
@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { DealStatus } from './deal-status.enum';
+import { Transactions } from 'src/transactions/transactions.entity';
 
 @Entity()
 export class Deals {
@@ -24,7 +25,6 @@ export class Deals {
     this.deal_reference = uuid();
   }
     
-
   @Column()
   user_id: number;
 
@@ -38,13 +38,13 @@ export class Deals {
   deal_amount: number;
 
   @Column()
-  sell_amount: number;
-
-  @Column()
   commision: number;
 
   @Column()
   status: DealStatus;
+
+  @OneToMany(() => Transactions, (transaction: Transactions) => transaction.deal)
+  transactions: Transactions[];
 
   @CreateDateColumn({ type: 'timestamp' })
   public created_at!: Date;

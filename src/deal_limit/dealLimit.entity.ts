@@ -8,16 +8,16 @@ export class DealLimit {
   id: number;
 
   @Column()
-  buy_minimum_amount: number;
+  minimum_buy_amount: number;
 
   @Column()
-  buy_maximum_amount: number;
+  maximum_buy_amount: number;
 
   @Column()
-  sell_minimum_amount: number;
+  minimum_sell_amount: number;
 
   @Column()
-  sell_maximum_amount: number;
+  maximum_sell_amount: number;
 
   @ManyToOne(() => DealCurrencyMap, (deal_currency_map) => deal_currency_map.deal_limit)
   deal_currency_map: DealCurrencyMap;
