@@ -53,6 +53,6 @@ export class Deals {
   public updated_at!: Date;
 
   @CreateDateColumn({ type: 'timestamp' })
-    public deleted_at!: Date;
+  public deleted_at!: Date;
 
 }

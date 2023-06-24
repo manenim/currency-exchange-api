@@ -31,4 +31,28 @@ export class DealCurrencyMapService {
     });
     return currencyMap;
   }
+
+  async getAllDealCurrencyMap(): Promise<DealCurrencyMap[]> {
+    return this.dealCurrencyMapRepository.find();
+  }
+
+  async getDealCurrencyMapById(id: number): Promise<DealCurrencyMap> {
+    return this.dealCurrencyMapRepository.findOne({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async updateDealCurrencyMapById(
+    id: number,
+    attrs: Partial<DealCurrencyMap>,
+  ): Promise<DealCurrencyMap> {
+    const dealCurrencyMap = await this.getDealCurrencyMapById(id);
+    if (!dealCurrencyMap) {
+      return null;
+    }
+    Object.assign(dealCurrencyMap, attrs);
+    return this.dealCurrencyMapRepository.save(dealCurrencyMap);
+  }
 }

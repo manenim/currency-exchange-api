@@ -46,6 +46,15 @@ export class TransactionsService {
     });
   }
 
+  //get transaction by reference
+  async getTransactionByReference(reference: string): Promise<Transactions> {
+    return this.transactionsRepository.findOne({
+      where: {
+        deal_transaction_reference: reference,
+      },
+    });
+  }
+
   //update transaction status
   // waiting for the differnnt status to be defined
 }

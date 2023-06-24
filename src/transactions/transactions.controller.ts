@@ -16,8 +16,9 @@ export class TransactionsController {
     return this.transactionsService.getAllTransactions();
   }
 
-  @Get(':id')
-  getTransactionById(@Param('id') id: number) {
-    return this.transactionsService.getTransactionById(id);
+  // get transaction by reference
+  @Get(':reference')
+  getTransactionByReference(@Param('reference') reference: string) {
+    return this.transactionsService.getTransactionByReference(reference);
   }
 }

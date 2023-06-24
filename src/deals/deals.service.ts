@@ -76,8 +76,8 @@ export class DealsService {
     return this.dealsRepository.save(deal);
   }
 
-  async deleteDeal(id: number) {
-    const deal = await this.getDealById(id);
-    return this.dealsRepository.remove(deal);
-  }
+  // async deleteDeal(id: number) {
+  //   const deal = await this.getDealById(id);
+  //   return this.dealsRepository.remove(deal);
+  // }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Param, Get } from '@nestjs/common';
+import { Controller, Post, Body, Param, Get, Delete } from '@nestjs/common';
 import { DealLimitService } from './dealLimit.service';
 import { CreateDealLimitDto } from './dto/create_deal_limit.dto';
 import { Currency } from 'src/deal_currency_map/decorators/currency.decorator';
@@ -27,5 +27,19 @@ export class DealLimitController {
   @Get('/:id')
   getDealLimitById(@Param('id') id: number): Promise<DealLimit> {
     return this.dealLimitService.getDealLimitById(id);
+  }
+
+  @Post('/:id')
+  updateDealLimitById(
+    @Param('id') id: number,
+    @Body() attrs: Partial<DealLimit>,
+  ): Promise<DealLimit> {
+    return this.dealLimitService.updateDealLimitById(id, attrs);
+  }
+
+  //delete deal limit
+  @Delete('/:id')
+  deleteDealLimitById(@Param('id') id: number): Promise<DealLimit> {
+    return this.dealLimitService.deleteDealLimitById(id);
   }
 }

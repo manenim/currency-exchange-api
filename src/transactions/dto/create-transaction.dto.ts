@@ -15,13 +15,13 @@ export class CreateTransactionDto {
 
   @IsNotEmpty()
   @IsNumber()
-  sell_amount: number;
+  amount: number;
 
   @IsNotEmpty()
   @IsNumber()
-  buy_amount: number;
+  paid_amount: number;
 
-  @IsNotEmpty()
-  @IsNumber()
-  commission: number;
+  // @IsNotEmpty()
+  // @IsNumber()
+  // commission: number;
 }

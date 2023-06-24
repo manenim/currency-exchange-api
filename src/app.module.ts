@@ -1,3 +1,4 @@
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { DealsModule } from './deals/deals.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,22 +9,30 @@ import { DealLimitModule } from './deal_limit/dealLimit.module';
 import { DealLimit } from './deal_limit/dealLimit.entity';
 import { TransactionsModule } from './transactions/transactions.module';
 import { Transactions } from './transactions/transactions.entity';
+import { configValidationSchema } from './config.schema';
 
 @Module({
   imports: [
-    DealsModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'manex1234',
-      database: 'deals',
-      // entities: ['dist/**/*.entity{.ts,.js}'],
-      entities: [Deals, DealCurrencyMap, DealLimit, Transactions],
-      autoLoadEntities: true,
-      synchronize: true,
+    ConfigModule.forRoot({
+      envFilePath: [`.env.stage.${process.env.STAGE}`],
+      validationSchema: configValidationSchema,
     }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        type: 'postgres',
+        entities: [Deals, DealCurrencyMap, DealLimit, Transactions],
+        autoLoadEntities: true,
+        synchronize: true,
+        host: configService.get('DB_HOST'),
+        port: configService.get('DB_PORT'),
+        username: configService.get('DB_USERNAME'),
+        password: configService.get('DB_PASSWORD'),
+        database: configService.get('DB_DATABASE'),
+      }),
+    }),
+    DealsModule,
     DealCurrencyMapModule,
     DealLimitModule,
     TransactionsModule,

@@ -35,14 +35,17 @@ export class Transactions {
   @Column()
   deal_rate: number;
 
-  @Column()
-  deal_amount: number;
+  // @Column()
+  // deal_amount: number;  // sale amount
 
   @Column()
-  sell_amount: number;
+  amount: number;  // amount
 
   @Column()
-  commision: number;
+  amount_paid: number;  // amount
+
+  // @Column()
+  // commision: number; // comission
 
   @ManyToOne(() => Deals, (deal: Deals) => deal.transactions)
   deal: Deals;

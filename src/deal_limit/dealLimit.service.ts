@@ -32,4 +32,26 @@ export class DealLimitService {
       },
     });
   }
+
+  //update deal limit
+  async updateDealLimitById(
+    id: number,
+    attrs: Partial<DealLimit>,
+  ): Promise<DealLimit> {
+    const dealLimit = await this.getDealLimitById(id);
+    if (!dealLimit) {
+      return null;
+    }
+    Object.assign(dealLimit, attrs);
+    return this.dealLimitRepository.save(dealLimit);
+  }
+
+  //delete deal limit
+  async deleteDealLimitById(id: number): Promise<DealLimit> {
+    const dealLimit = await this.getDealLimitById(id);
+    if (!dealLimit) {
+      return null;
+    }
+    return this.dealLimitRepository.remove(dealLimit);
+  }
 }
